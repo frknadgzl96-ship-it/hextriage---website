@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HexTriage — AI Support for DeFi Protocols</title>
+<meta name="description" content="HexTriage is an AI-powered Web3 support bot that diagnoses failed transactions, catches scam tokens, and routes VIP users to your team — instantly, in any language, 24/7.">
+<style>
+  :root {
+    --bg: #0a0e14;
+    --bg-elevated: #10161f;
+    --bg-card: #131a24;
+    --border: #1f2937;
+    --text: #e6edf3;
+    --text-dim: #8b96a5;
+    --text-faint: #5c6979;
+    --accent: #5eead4;
+    --accent-dim: #2dd4bf;
+    --accent-glow: rgba(94, 234, 212, 0.15);
+    --danger: #f87171;
+    --warning: #fbbf24;
+    --radius: 12px;
+    --max-width: 1140px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  .container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ===== Background glow effect ===== */
+  body::before {
+    content: "";
+    position: fixed;
+    top: -200px;
+    left: 50%;
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+    transform: translateX(-50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ===== Nav ===== */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10, 14, 20, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  nav .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 68px;
+  }
+
+  .logo {
+    font-weight: 700;
+    font-size: 1.15rem;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .logo-mark {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: linear-gradient(135deg, var(--accent) 0%, #38bdf8 100%);
+    display: inline-block;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    font-size: 0.92rem;
+    color: var(--text-dim);
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  .nav-cta {
+    background: var(--accent);
+    color: #06201c;
+    padding: 9px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.88rem;
+    transition: opacity 0.15s ease;
+  }
+
+  .nav-cta:hover { opacity: 0.85; }
+
+  .mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+
+  /* ===== Section spacing ===== */
+  section {
+    position: relative;
+    z-index: 1;
+    padding: 96px 0;
+  }
+
+  .section-label {
+    color: var(--accent);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  h1, h2, h3 { letter-spacing: -0.02em; }
+
+  /* ===== Hero ===== */
+  .hero {
+    padding: 120px 0 100px;
+    text-align: center;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    margin-bottom: 28px;
+  }
+
+  .hero-badge .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+  }
+
+  .hero h1 {
+    font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+    font-weight: 800;
+    line-height: 1.08;
+    max-width: 880px;
+    margin: 0 auto 24px;
+  }
+
+  .hero h1 .gradient {
+    background: linear-gradient(135deg, var(--accent) 0%, #38bdf8 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .hero p.subhead {
+    font-size: clamp(1.05rem, 2vw, 1.25rem);
+    color: var(--text-dim);
+    max-width: 620px;
+    margin: 0 auto 40px;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.98rem;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #06201c;
+    box-shadow: 0 0 0 1px rgba(94,234,212,0.3), 0 8px 30px -8px var(--accent-glow);
+  }
+
+  .btn-primary:hover { transform: translateY(-2px); opacity: 0.92; }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ===== Stat strip ===== */
+  .stat-strip {
+    display: flex;
+    justify-content: center;
+    gap: 56px;
+    margin-top: 72px;
+    flex-wrap: wrap;
+  }
+
+  .stat-item { text-align: center; }
+
+  .stat-item .num {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent);
+  }
+
+  .stat-item .label {
+    font-size: 0.85rem;
+    color: var(--text-faint);
+    margin-top: 4px;
+  }
+
+  /* ===== Problem section ===== */
+  .problem {
+    background: var(--bg-elevated);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+
+  .problem h2 {
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    margin-bottom: 20px;
+    font-weight: 800;
+  }
+
+  .problem p.lead {
+    color: var(--text-dim);
+    font-size: 1.08rem;
+    margin-bottom: 16px;
+  }
+
+  .terminal-mock {
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 20px 60px -20px rgba(0,0,0,0.6);
+  }
+
+  .terminal-head {
+    display: flex;
+    gap: 8px;
+    padding: 12px 16px;
+    background: #161b22;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .terminal-dot { width: 11px; height: 11px; border-radius: 50%; }
+  .terminal-dot.red { background: #f87171; }
+  .terminal-dot.yellow { background: #fbbf24; }
+  .terminal-dot.green { background: #34d399; }
+
+  .terminal-body {
+    padding: 20px;
+    font-family: "SF Mono", Consolas, monospace;
+    font-size: 0.86rem;
+    line-height: 1.7;
+  }
+
+  .terminal-body .ts { color: var(--text-faint); }
+  .terminal-body .user-msg { color: var(--text); }
+  .terminal-body .bot-msg { color: var(--accent); }
+  .terminal-body .err { color: var(--danger); }
+
+  /* ===== How it works ===== */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    margin-top: 56px;
+  }
+
+  .step-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px 28px;
+    position: relative;
+  }
+
+  .step-num {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: var(--accent-glow);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1.05rem;
+    margin-bottom: 20px;
+  }
+
+  .step-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+
+  .step-card p {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+  }
+
+  .section-head {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto 8px;
+  }
+
+  .section-head h2 {
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    font-weight: 800;
+    margin-bottom: 16px;
+  }
+
+  .section-head p {
+    color: var(--text-dim);
+    font-size: 1.05rem;
+  }
+
+  /* ===== Features ===== */
+  .features {
+    background: var(--bg-elevated);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-top: 56px;
+  }
+
+  .feature-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 30px;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .feature-card:hover {
+    border-color: var(--accent-dim);
+    transform: translateY(-3px);
+  }
+
+  .feature-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: var(--accent-glow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    margin-bottom: 18px;
+  }
+
+  .feature-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+  }
+
+  .feature-card p {
+    color: var(--text-dim);
+    font-size: 0.93rem;
+  }
+
+  /* ===== Pricing ===== */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 56px;
+    align-items: stretch;
+  }
+
+  .price-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px 30px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .price-card.featured {
+    border-color: var(--accent);
+    background: linear-gradient(180deg, rgba(94,234,212,0.06) 0%, var(--bg-card) 100%);
+    position: relative;
+  }
+
+  .price-card.featured::before {
+    content: "MOST POPULAR";
+    position: absolute;
+    top: -12px;
+    left: 30px;
+    background: var(--accent);
+    color: #06201c;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+
+  .price-card h3 {
+    font-size: 1.15rem;
+    margin-bottom: 6px;
+  }
+
+  .price-card .tagline {
+    color: var(--text-faint);
+    font-size: 0.88rem;
+    margin-bottom: 24px;
+  }
+
+  .price-amount {
+    font-size: 2.6rem;
+    font-weight: 800;
+    margin-bottom: 2px;
+  }
+
+  .price-amount span {
+    font-size: 1rem;
+    color: var(--text-faint);
+    font-weight: 500;
+  }
+
+  .price-card ul {
+    list-style: none;
+    margin: 28px 0 32px;
+    flex-grow: 1;
+  }
+
+  .price-card li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 9px 0;
+    color: var(--text-dim);
+    font-size: 0.92rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .price-card li:first-child { border-top: none; }
+
+  .price-card li .check {
+    color: var(--accent);
+    flex-shrink: 0;
+    font-weight: 700;
+  }
+
+  .price-card .btn { width: 100%; }
+
+  /* ===== Contact ===== */
+  .contact {
+    background: var(--bg-elevated);
+    border-top: 1px solid var(--border);
+  }
+
+  .contact-wrap {
+    max-width: 580px;
+    margin: 56px auto 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 40px;
+  }
+
+  .form-row { margin-bottom: 20px; }
+
+  .form-row label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  .form-row input,
+  .form-row textarea {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    color: var(--text);
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: border-color 0.15s ease;
+  }
+
+  .form-row input:focus,
+  .form-row textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .form-row textarea { resize: vertical; min-height: 110px; }
+
+  #form-status {
+    margin-top: 16px;
+    font-size: 0.9rem;
+    text-align: center;
+    min-height: 20px;
+  }
+
+  #form-status.success { color: var(--accent); }
+  #form-status.error { color: var(--danger); }
+
+  /* ===== Footer ===== */
+  footer {
+    padding: 40px 0;
+    text-align: center;
+    color: var(--text-faint);
+    font-size: 0.85rem;
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 860px) {
+    .nav-links { display: none; }
+    .mobile-menu-btn { display: block; }
+    .problem-grid { grid-template-columns: 1fr; gap: 40px; }
+    .steps { grid-template-columns: 1fr; }
+    .feature-grid { grid-template-columns: 1fr; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .stat-strip { gap: 32px; }
+    section { padding: 64px 0; }
+    .hero { padding: 96px 0 64px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <div class="logo"><span class="logo-mark"></span> HexTriage</div>
+    <div class="nav-links">
+      <a href="#how-it-works">How it Works</a>
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a href="#contact" class="nav-cta">Book a Demo</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge"><span class="dot"></span> Live across Discord &amp; Telegram</div>
+    <h1>Your protocol's support team, <span class="gradient">awake 24/7.</span></h1>
+    <p class="subhead">HexTriage is an AI-powered Web3 support bot that diagnoses failed transactions, flags scam tokens, and routes VIP users straight to your team — instantly, in any language.</p>
+    <div class="hero-ctas">
+      <a href="#contact" class="btn btn-primary">Book a Demo</a>
+      <a href="#how-it-works" class="btn btn-secondary">See How it Works</a>
+    </div>
+    <div class="stat-strip">
+      <div class="stat-item"><div class="num">13+</div><div class="label">Chains Supported</div></div>
+      <div class="stat-item"><div class="num">&lt;2s</div><div class="label">Avg. Response Time</div></div>
+      <div class="stat-item"><div class="num">24/7</div><div class="label">Always-On Coverage</div></div>
+      <div class="stat-item"><div class="num">100%</div><div class="label">Wealth-Blind VIP Routing</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem">
+  <div class="container">
+    <div class="problem-grid">
+      <div>
+        <span class="section-label">The Problem</span>
+        <h2>It's 2am. A user's transaction just failed.</h2>
+        <p class="lead">They don't know if their funds are gone. They don't know if it's slippage, a missing approval, or a contract bug. Your support team is asleep — so they panic in your Discord, or worse, in someone else's DM pretending to "help."</p>
+        <p class="lead">Every unanswered failed-tx message is a trust problem waiting to become a churn problem — or a phishing victim.</p>
+      </div>
+      <div class="terminal-mock">
+        <div class="terminal-head">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+        </div>
+        <div class="terminal-body">
+          <div><span class="ts">[02:14 AM]</span> <span class="user-msg">user_8821: my swap just failed?? did i lose my funds</span></div>
+          <div><span class="ts">[02:14 AM]</span> <span class="err">tx reverted — no response from support</span></div>
+          <div><span class="ts">[02:31 AM]</span> <span class="user-msg">user_8821: ???? anyone</span></div>
+          <div><span class="ts">[02:45 AM]</span> <span class="user-msg">user_8821: ok found a "support" dm, sending my seed phrase</span></div>
+          <br>
+          <div><span class="ts">[with HexTriage →]</span></div>
+          <div><span class="ts">[02:14 AM]</span> <span class="bot-msg">HexTriage: Checked it — contract revert, "InsufficientOutputAmount." Your funds never left your wallet. Increase slippage to 1-2% and retry.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how-it-works">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-label">How it Works</span>
+      <h2>From panic to resolved in three steps</h2>
+      <p>No setup headaches. No new app to learn. It lives where your community already is.</p>
+    </div>
+    <div class="steps">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <h3>User pastes a tx hash or address</h3>
+        <p>Right in your Discord or Telegram — no ticket forms, no waiting in a queue. Just a normal message.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <h3>HexTriage diagnoses it instantly</h3>
+        <p>Cross-references on-chain data, decodes the exact revert reason, and checks for scam signals — across 13+ chains.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <h3>Resolved, or routed to your team</h3>
+        <p>Most issues get answered on the spot. High-value or sensitive cases are flagged and handed to a human, instantly.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" class="features">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-label">Features</span>
+      <h2>Built specifically for DeFi support</h2>
+      <p>Not a generic chatbot wrapper — purpose-built diagnostics for the exact problems your users actually hit.</p>
+    </div>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">⛓</div>
+        <h3>Transaction Diagnostics</h3>
+        <p>Decodes failed transactions down to the exact revert reason — including custom Solidity errors — across 13+ EVM chains. Tells users plainly what happened and how to fix it.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🛡</div>
+        <h3>Scam &amp; Honeypot Detection</h3>
+        <p>Checks contract addresses for honeypots, blacklists, abnormal taxes, and dangerous ownership concentration before your users get rugged.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⭐</div>
+        <h3>VIP Routing</h3>
+        <p>Automatically detects high-value wallets and routes them straight to your team — without ever exposing balance figures in chat. Wealth-blind by design.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌐</div>
+        <h3>Multilingual, Natively</h3>
+        <p>Responds fluently in whatever language your user writes in — no translation plugins, no missed non-English communities.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-label">Pricing</span>
+      <h2>Simple, transparent plans</h2>
+      <p>Pick the tier that matches your community size and support volume. All plans include setup assistance.</p>
+    </div>
+    <div class="pricing-grid">
+
+      <div class="price-card">
+        <h3>Starter</h3>
+        <div class="tagline">For small, growing protocols</div>
+        <div class="price-amount">$499<span>/mo</span></div>
+        <ul>
+          <li><span class="check">✓</span> 1 Discord or Telegram community</li>
+          <li><span class="check">✓</span> Transaction diagnostics</li>
+          <li><span class="check">✓</span> Scam &amp; honeypot detection</li>
+          <li><span class="check">✓</span> Up to 6 supported chains</li>
+          <li><span class="check">✓</span> Email support</li>
+        </ul>
+        <a href="#contact" class="btn btn-secondary">Get Started</a>
+      </div>
+
+      <div class="price-card featured">
+        <h3>Growth</h3>
+        <div class="tagline">For established protocols at scale</div>
+        <div class="price-amount">$1,199<span>/mo</span></div>
+        <ul>
+          <li><span class="check">✓</span> Discord &amp; Telegram, both included</li>
+          <li><span class="check">✓</span> Everything in Starter</li>
+          <li><span class="check">✓</span> VIP routing &amp; priority escalation</li>
+          <li><span class="check">✓</span> All 13+ supported chains</li>
+          <li><span class="check">✓</span> Ticket system with custom forms</li>
+          <li><span class="check">✓</span> Priority support, &lt;24h response</li>
+        </ul>
+        <a href="#contact" class="btn btn-primary">Get Started</a>
+      </div>
+
+      <div class="price-card">
+        <h3>Enterprise</h3>
+        <div class="tagline">For multi-protocol teams &amp; DAOs</div>
+        <div class="price-amount">$3,500<span>+/mo</span></div>
+        <ul>
+          <li><span class="check">✓</span> Everything in Growth</li>
+          <li><span class="check">✓</span> Custom knowledge base per protocol</li>
+          <li><span class="check">✓</span> Dedicated onboarding &amp; account manager</li>
+          <li><span class="check">✓</span> Custom integrations &amp; SLAs</li>
+          <li><span class="check">✓</span> White-label option</li>
+        </ul>
+        <a href="#contact" class="btn btn-secondary">Contact Sales</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-label">Contact</span>
+      <h2>Let's get your community covered</h2>
+      <p>Tell us about your protocol and we'll get back to you within one business day.</p>
+    </div>
+    <div class="contact-wrap">
+      <form id="contact-form">
+        <div class="form-row">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required placeholder="Jane Doe">
+        </div>
+        <div class="form-row">
+          <label for="protocol">Protocol</label>
+          <input type="text" id="protocol" name="protocol" required placeholder="Your Protocol Name">
+        </div>
+        <div class="form-row">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required placeholder="you@protocol.xyz">
+        </div>
+        <div class="form-row">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" required placeholder="Tell us about your community size and support needs..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;">Send Message</button>
+        <div id="form-status"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    &copy; <span id="year"></span> HexTriage. All rights reserved.
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Mobile-friendly smooth scroll is handled via CSS `scroll-behavior: smooth`.
+
+  // Simple client-side form handling (no backend wired up yet —
+  // replace this with a real endpoint, e.g. Formspree, Resend, or your own API).
+  const form = document.getElementById('contact-form');
+  const status = document.getElementById('form-status');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const data = {
+      name: form.name.value.trim(),
+      protocol: form.protocol.value.trim(),
+      email: form.email.value.trim(),
+      message: form.message.value.trim(),
+    };
+
+    if (!data.name || !data.protocol || !data.email || !data.message) {
+      status.textContent = 'Please fill in all fields.';
+      status.className = 'error';
+      return;
+    }
+
+    // Placeholder success state — wire this up to a real form backend.
+    console.log('Contact form submission:', data);
+    status.textContent = "Thanks! We'll be in touch within one business day.";
+    status.className = 'success';
+    form.reset();
+  });
+</script>
+
+</body>
+</html>
