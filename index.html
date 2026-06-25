@@ -5,18 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HexTriage — AI Support for DeFi Protocols</title>
 <meta name="description" content="HexTriage is an AI-powered Web3 support bot that diagnoses failed transactions, catches scam tokens, and routes VIP users to your team — instantly, in any language, 24/7.">
+<link rel="icon" type="image/png" href="logo.png">
 <style>
   :root {
-    --bg: #0a0e14;
-    --bg-elevated: #10161f;
-    --bg-card: #131a24;
-    --border: #1f2937;
+    --bg: #0a0e1a;
+    --bg-elevated: #0f1626;
+    --bg-card: #131b2e;
+    --border: #1e2940;
     --text: #e6edf3;
     --text-dim: #8b96a5;
     --text-faint: #5c6979;
-    --accent: #5eead4;
-    --accent-dim: #2dd4bf;
-    --accent-glow: rgba(94, 234, 212, 0.15);
+    --accent: #29abe2;
+    --accent-dim: #1f8fc4;
+    --accent-glow: rgba(41, 171, 226, 0.15);
     --danger: #f87171;
     --warning: #fbbf24;
     --radius: 12px;
@@ -83,12 +84,9 @@
     gap: 8px;
   }
 
-  .logo-mark {
-    width: 28px;
-    height: 28px;
-    border-radius: 6px;
-    background: linear-gradient(135deg, var(--accent) 0%, #38bdf8 100%);
-    display: inline-block;
+  .logo-img {
+    height: 34px;
+    display: block;
   }
 
   .nav-links {
@@ -102,7 +100,7 @@
 
   .nav-cta {
     background: var(--accent);
-    color: #06201c;
+    color: #06141f;
     padding: 9px 18px;
     border-radius: 8px;
     font-weight: 600;
@@ -211,8 +209,8 @@
 
   .btn-primary {
     background: var(--accent);
-    color: #06201c;
-    box-shadow: 0 0 0 1px rgba(94,234,212,0.3), 0 8px 30px -8px var(--accent-glow);
+    color: #06141f;
+    box-shadow: 0 0 0 1px rgba(41,171,226,0.35), 0 8px 30px -8px var(--accent-glow);
   }
 
   .btn-primary:hover { transform: translateY(-2px); opacity: 0.92; }
@@ -433,7 +431,7 @@
 
   .price-card.featured {
     border-color: var(--accent);
-    background: linear-gradient(180deg, rgba(94,234,212,0.06) 0%, var(--bg-card) 100%);
+    background: linear-gradient(180deg, rgba(41,171,226,0.08) 0%, var(--bg-card) 100%);
     position: relative;
   }
 
@@ -443,7 +441,7 @@
     top: -12px;
     left: 30px;
     background: var(--accent);
-    color: #06201c;
+    color: #06141f;
     font-size: 0.7rem;
     font-weight: 800;
     letter-spacing: 0.06em;
@@ -582,7 +580,7 @@
 
 <nav>
   <div class="container">
-    <div class="logo"><span class="logo-mark"></span> HexTriage</div>
+    <div class="logo"><img src="logo.png" alt="HexTriage" class="logo-img"></div>
     <div class="nav-links">
       <a href="#how-it-works">How it Works</a>
       <a href="#features">Features</a>
