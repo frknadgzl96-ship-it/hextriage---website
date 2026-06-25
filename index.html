@@ -768,7 +768,7 @@
       <p>Tell us about your protocol and we'll get back to you within one business day.</p>
     </div>
     <div class="contact-wrap">
-      <form id="contact-form">
+      <form id="contact-form" action="https://formsubmit.co/ajax/kutay.kanik@hextriage.com" method="POST">
         <div class="form-row">
           <label for="name">Name</label>
           <input type="text" id="name" name="name" required placeholder="Jane Doe">
@@ -785,6 +785,8 @@
           <label for="message">Message</label>
           <textarea id="message" name="message" required placeholder="Tell us about your community size and support needs..."></textarea>
         </div>
+        <input type="hidden" name="_subject" value="New HexTriage contact form submission">
+        <input type="hidden" name="_captcha" value="false">
         <button type="submit" class="btn btn-primary" style="width:100%;">Send Message</button>
         <div id="form-status"></div>
       </form>
@@ -803,32 +805,51 @@
 
   // Mobile-friendly smooth scroll is handled via CSS `scroll-behavior: smooth`.
 
-  // Simple client-side form handling (no backend wired up yet.
-  // Replace this with a real endpoint, e.g. Formspree, Resend, or your own API).
+  // Submits via FormSubmit.co's AJAX endpoint (see the form's action attribute).
+  // No backend of our own needed; FormSubmit emails the data to the configured address.
   const form = document.getElementById('contact-form');
   const status = document.getElementById('form-status');
 
-  form.addEventListener('submit', function (e) {
+  form.addEventListener('submit', async function (e) {
     e.preventDefault();
 
-    const data = {
-      name: form.name.value.trim(),
-      protocol: form.protocol.value.trim(),
-      email: form.email.value.trim(),
-      message: form.message.value.trim(),
-    };
+    const name = form.name.value.trim();
+    const protocol = form.protocol.value.trim();
+    const email = form.email.value.trim();
+    const message = form.message.value.trim();
 
-    if (!data.name || !data.protocol || !data.email || !data.message) {
+    if (!name || !protocol || !email || !message) {
       status.textContent = 'Please fill in all fields.';
       status.className = 'error';
       return;
     }
 
-    // Placeholder success state. Wire this up to a real form backend.
-    console.log('Contact form submission:', data);
-    status.textContent = "Thanks! We'll be in touch within one business day.";
-    status.className = 'success';
-    form.reset();
+    const submitBtn = form.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    status.textContent = '';
+    status.className = '';
+
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(form),
+      });
+
+      if (response.ok) {
+        status.textContent = "Thanks! We'll be in touch within one business day.";
+        status.className = 'success';
+        form.reset();
+      } else {
+        status.textContent = 'Something went wrong sending your message. Please try again or email us directly.';
+        status.className = 'error';
+      }
+    } catch (err) {
+      status.textContent = 'Something went wrong sending your message. Please try again or email us directly.';
+      status.className = 'error';
+    } finally {
+      submitBtn.disabled = false;
+    }
   });
 </script>
 
