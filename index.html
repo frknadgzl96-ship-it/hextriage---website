@@ -551,7 +551,7 @@
     min-height: 20px;
   }
 
-  #form-status.success { color: var(--accent); }
+  #form-status.success { color: #4ade80; }
   #form-status.error { color: var(--danger); }
 
   /* ===== Footer ===== */
@@ -837,15 +837,15 @@
       });
 
       if (response.ok) {
-        status.textContent = "Thanks! We'll be in touch within one business day.";
+        status.textContent = "Message received! We'll get back to you within one business day.";
         status.className = 'success';
         form.reset();
       } else {
-        status.textContent = 'Something went wrong sending your message. Please try again or email us directly.';
+        status.textContent = 'Something went wrong. Please try me directly at kutay.kanik@hextriage.com.';
         status.className = 'error';
       }
     } catch (err) {
-      status.textContent = 'Something went wrong sending your message. Please try again or email us directly.';
+      status.textContent = 'Something went wrong. Please try me directly at kutay.kanik@hextriage.com.';
       status.className = 'error';
     } finally {
       submitBtn.disabled = false;
