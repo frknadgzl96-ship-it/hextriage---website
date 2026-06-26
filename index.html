@@ -824,6 +824,13 @@
       return;
     }
 
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+      status.textContent = 'Please enter a valid email address.';
+      status.className = 'error';
+      return;
+    }
+
     const submitBtn = form.querySelector('button[type="submit"]');
     submitBtn.disabled = true;
     status.textContent = '';
