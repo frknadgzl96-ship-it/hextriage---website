@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Security & Trust Overview — HexTriage</title>
+<title>Security & Trust Overview | HexTriage</title>
 <meta name="description" content="What HexTriage can and cannot do inside your community, what data it touches, and where that data goes.">
 <link rel="icon" type="image/png" href="/logo.png">
 <style>
@@ -300,7 +300,7 @@
 <section>
   <div class="container">
     <div class="lead-note" style="margin-top: 0; max-width: 820px; margin-left: auto; margin-right: auto; font-size: 1rem;">
-      <strong style="color: var(--text);">The short version —</strong> HexTriage is a read-and-reply support bot. It holds no funds, executes no transactions, and requests no wallet permissions. It runs with the minimum platform permissions needed to answer questions in designated channels, and cannot initiate contact with your users by design.
+      <strong style="color: var(--text);">The short version:</strong> HexTriage is a read-and-reply support bot. It holds no funds, executes no transactions, and requests no wallet permissions. It runs with the minimum platform permissions needed to answer questions in designated channels, and cannot initiate contact with your users by design.
     </div>
   </div>
 </section>
@@ -317,7 +317,7 @@
       <div class="info-card">
         <h3>Discord</h3>
         <ul>
-          <li><span class="mark yes">✓</span> Read Messages, Send Messages, Read Message History, Embed Links — in designated support channels only</li>
+          <li><span class="mark yes">✓</span> Read Messages, Send Messages, Read Message History, Embed Links, in designated support channels only</li>
           <li><span class="mark no">✕</span> No Administrator</li>
           <li><span class="mark no">✕</span> No Manage Server</li>
           <li><span class="mark no">✕</span> No Manage Roles</li>
@@ -347,10 +347,10 @@
     <div class="card-grid">
       <div class="info-card">
         <ul>
-          <li><span class="mark yes">✓</span> Never initiates DMs — scam bots DM first; HexTriage structurally cannot</li>
+          <li><span class="mark yes">✓</span> Never initiates DMs, since scam bots DM first and HexTriage structurally cannot</li>
           <li><span class="mark yes">✓</span> Never asks for private keys, seed phrases, or wallet connections, and warns users that legitimate support never will</li>
           <li><span class="mark yes">✓</span> No signing capability of any kind</li>
-          <li><span class="mark yes">✓</span> Wealth-blind — users are never profiled or prioritized by wallet balance</li>
+          <li><span class="mark yes">✓</span> Wealth-blind, meaning users are never profiled or prioritized by wallet balance</li>
         </ul>
       </div>
     </div>
@@ -373,7 +373,7 @@
         </tr>
         <tr>
           <td>Conversations (user question + bot answer)</td>
-          <td>Quality assurance — catching and correcting bot mistakes</td>
+          <td>Quality assurance: catching and correcting bot mistakes</td>
           <td>30 days, auto-deleted</td>
         </tr>
         <tr>
@@ -394,11 +394,11 @@
         <tr>
           <td>Aggregate statistics (counts, categories, deflection rate)</td>
           <td>Monthly reporting to your team</td>
-          <td>Contract duration — contains no personal data</td>
+          <td>Contract duration, contains no personal data</td>
         </tr>
       </table>
     </div>
-    <p class="lead-note">User identity in conversation logs is stored only as an irreversible cryptographic hash — raw usernames are never written to conversation records. No emails, KYC data, or off-chain personal identifiers are ever collected.</p>
+    <p class="lead-note">User identity in conversation logs is stored only as an irreversible cryptographic hash. Raw usernames are never written to conversation records. No emails, KYC data, or off-chain personal identifiers are ever collected.</p>
   </div>
 </section>
 
@@ -408,7 +408,7 @@
     <div class="section-head">
       <span class="section-label">Transparency</span>
       <h2>Transcript transparency</h2>
-      <p>Clients can review their own community's conversations in their dashboard at any time, strictly isolated per client, with one-click flagging of any answer for review. Your bot's work is fully auditable — no black box.</p>
+      <p>Clients can review their own community's conversations in their dashboard at any time, strictly isolated per client, with one-click flagging of any answer for review. Your bot's work is fully auditable, no black box.</p>
     </div>
   </div>
 </section>
@@ -422,12 +422,12 @@
     </div>
     <div class="subproc-list">
       <div class="subproc-item">
-        <div class="subproc-name">AI — Anthropic (Claude API)</div>
+        <div class="subproc-name">AI: Anthropic (Claude API)</div>
         <p>Receives message text for response generation. Per Anthropic's commercial terms, API inputs and outputs are not used to train models.</p>
       </div>
       <div class="subproc-item">
         <div class="subproc-name">Blockchain data</div>
-        <p>Industry-standard on-chain data and contract-intelligence providers, which receive only public identifiers (transaction hashes, contract addresses) — data already visible on any block explorer. No message content is ever shared with them.</p>
+        <p>Industry-standard on-chain data and contract-intelligence providers, which receive only public identifiers (transaction hashes, contract addresses), data already visible on any block explorer. No message content is ever shared with them.</p>
       </div>
       <div class="subproc-item">
         <div class="subproc-name">Security screening</div>
@@ -465,7 +465,7 @@
     <div class="section-head">
       <span class="section-label">Compliance</span>
       <h2>Compliance and data rights</h2>
-      <p>EU-operated with GDPR-aware practices: data minimization, hashed identifiers, defined retention, deletion on request. A Data Processing Agreement is available on request. Client knowledge bases are fully isolated — one protocol's documentation never informs another's bot.</p>
+      <p>EU-operated with GDPR-aware practices: data minimization, hashed identifiers, defined retention, deletion on request. A Data Processing Agreement is available on request. Client knowledge bases are fully isolated, so one protocol's documentation never informs another's bot.</p>
     </div>
   </div>
 </section>
@@ -479,7 +479,7 @@
     </div>
     <div class="cta-panel">
       <h3>Security contact</h3>
-      <p>Reach us at <a class="contact-email" href="mailto:security@hextriage.io">security@hextriage.io</a> — acknowledged within 24 hours.</p>
+      <p>Reach us at <a class="contact-email" href="mailto:security@hextriage.io">security@hextriage.io</a>, acknowledged within 24 hours.</p>
       <p style="margin-top: 18px;">Ultimate control is yours: revoking the bot's channel permissions ends all access instantly, no action from us required.</p>
     </div>
   </div>
