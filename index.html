@@ -197,21 +197,17 @@
   .hero-video-wrap {
     max-width: 780px;
     margin: 8px auto 40px;
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 */
-    height: 0;
     border-radius: var(--radius);
     overflow: hidden;
     border: 1px solid var(--border);
     box-shadow: 0 20px 60px -20px rgba(0, 0, 0, 0.5);
+    line-height: 0; /* removes the small inline-element gap under the video */
   }
 
-  .hero-video-wrap iframe {
-    position: absolute;
-    inset: 0;
+  .hero-video-wrap video {
+    display: block;
     width: 100%;
-    height: 100%;
-    border: 0;
+    height: auto;
   }
 
   .btn {
@@ -625,13 +621,9 @@
     <h1>Your protocol's support team, <span class="gradient">awake 24/7.</span></h1>
     <p class="subhead">HexTriage is an AI-powered Web3 support bot that diagnoses failed transactions, flags scam tokens, and routes VIP users straight to your team instantly, in any language.</p>
     <div class="hero-video-wrap">
-      <iframe
-        src="https://www.youtube-nocookie.com/embed/f8BoDdq7kKk"
-        title="HexTriage product demo"
-        loading="lazy"
-        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen
-      ></iframe>
+      <video controls preload="metadata" playsinline title="HexTriage product demo">
+        <source src="/demo.mp4" type="video/mp4">
+      </video>
     </div>
     <div class="hero-ctas">
       <a href="#contact" class="btn btn-primary">Book a Demo</a>
